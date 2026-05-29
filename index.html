@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>MEGABET · ¿Podés ganarle al casino?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #08090d;
+    --bg-2: #11131a;
+    --surface: rgba(255,255,255,0.04);
+    --surface-2: rgba(255,255,255,0.07);
+    --border: rgba(255,255,255,0.08);
+    --text: #ffffff;
+    --text-2: #8a8d99;
+    --red: #ff2e4c;
+    --red-glow: rgba(255,46,76,0.4);
+    --green: #00d97e;
+    --gold: #f4b942;
+    --gold-2: #ffd970;
+  }
+
+  html, body { height: 100%; }
+  body {
+    font-family: 'Manrope', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overscroll-behavior: none;
+    -webkit-tap-highlight-color: transparent;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(circle at 20% 10%, rgba(255,46,76,0.08), transparent 50%),
+      radial-gradient(circle at 80% 90%, rgba(244,185,66,0.06), transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .app {
+    position: relative;
+    z-index: 1;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 16px;
+    gap: 14px;
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 2px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+  }
+  .brand-name {
+    font-family: 'Anton', sans-serif;
+    font-size: 28px;
+    letter-spacing: 1.5px;
+    background: linear-gradient(180deg, var(--gold-2), var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .brand-tld {
+    font-weight: 500;
+    font-size: 13px;
+    color: var(--text-2);
+    margin-left: 3px;
+  }
+
+  .online-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 6px 10px;
+    border-radius: 100px;
+    font-size: 11px;
+    color: var(--text-2);
+  }
+
+  .pulse-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.85); }
+  }
+
+  .balance-card {
+    background: linear-gradient(135deg, var(--surface), var(--surface-2));
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 18px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+  }
+  .balance-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, var(--gold), transparent 70%);
+    opacity: 0.08;
+    filter: blur(40px);
+  }
+  .balance-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-2);
+    margin-bottom: 4px;
+  }
+  .balance-amount {
+    font-family: 'Anton', sans-serif;
+    font-size: 36px;
+    letter-spacing: 0.5px;
+    color: var(--gold-2);
+    line-height: 1;
+  }
+  .stats-mini { text-align: right; line-height: 1.6; }
+  .stats-mini .stat {
+    font-size: 11px;
+    color: var(--text-2);
+  }
+  .stats-mini .stat strong {
+    color: var(--text);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .wheel-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0;
+    gap: 16px;
+  }
+  .wheel {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    border: 5px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Anton', sans-serif;
+    font-size: 72px;
+    color: white;
+    background: var(--bg-2);
+    transition: background 0.2s, box-shadow 0.3s;
+  }
+  .wheel.spinning {
+    animation: shake 0.08s infinite;
+  }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-3px) rotate(-1deg); }
+    75% { transform: translateX(3px) rotate(1deg); }
+  }
+  .wheel.red { background: var(--red); box-shadow: 0 0 50px var(--red-glow); border-color: var(--red); }
+  .wheel.black { background: #1a1a1a; border-color: #2a2a2a; }
+  .wheel.green {
+    background: var(--green);
+    box-shadow: 0 0 50px rgba(0,217,126,0.4);
+    border-color: var(--green);
+  }
+
+  .history-bar {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    min-height: 22px;
+    flex-wrap: wrap;
+    max-width: 100%;
+  }
+  .history-dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+  }
+  .history-dot.red { background: var(--red); }
+  .history-dot.black { background: #2a2a2a; border: 1px solid var(--border); }
+  .history-dot.green { background: var(--green); }
+
+  .bet-controls {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 14px;
+  }
+  .chips {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .chip {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 10px 4px;
+    border-radius: 10px;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .chip:active { transform: scale(0.96); }
+  .chip.active {
+    background: var(--gold);
+    color: #1a1a1a;
+    border-color: var(--gold);
+  }
+
+  .colors {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .color-btn {
+    padding: 16px;
+    border-radius: 12px;
+    border: 2px solid transparent;
+    font-family: 'Anton', sans-serif;
+    font-size: 22px;
+    letter-spacing: 1px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .color-btn.red { background: var(--red); }
+  .color-btn.black { background: #1a1a1a; }
+  .color-btn.selected { border-color: var(--gold); transform: scale(1.02); }
+  .color-btn:active { transform: scale(0.98); }
+
+  .spin-btn {
+    width: 100%;
+    padding: 18px;
+    background: var(--gold);
+    border: none;
+    border-radius: 12px;
+    font-family: 'Anton', sans-serif;
+    font-size: 22px;
+    letter-spacing: 2px;
+    color: #1a1a1a;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .spin-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+  .spin-btn:not(:disabled):active { transform: scale(0.98); }
+
+  .toast {
+    position: fixed;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-20px);
+    background: rgba(20,22,30,0.95);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 10px 18px;
+    font-size: 13px;
+    font-weight: 700;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    z-index: 100;
+    white-space: nowrap;
+    max-width: 90vw;
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  .toast.win { color: var(--green); border-color: rgba(0,217,126,0.4); }
+  .toast.loss { color: var(--red); border-color: rgba(255,46,76,0.4); }
+
+  .modal-bg {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+    padding: 20px;
+  }
+  .modal-bg.show { opacity: 1; pointer-events: auto; }
+
+  .modal {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 26px 24px;
+    max-width: 360px;
+    text-align: center;
+    transform: scale(0.92);
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .modal-bg.show .modal { transform: scale(1); }
+
+  .modal-badge {
+    display: inline-block;
+    background: var(--gold);
+    color: #1a1a1a;
+    font-weight: 700;
+    font-size: 10px;
+    padding: 4px 10px;
+    border-radius: 100px;
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+  }
+  .modal h2 {
+    font-family: 'Anton', sans-serif;
+    font-size: 26px;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+  }
+  .modal p {
+    color: var(--text-2);
+    line-height: 1.5;
+    margin-bottom: 18px;
+    font-size: 14px;
+  }
+  .modal button {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background: var(--gold);
+    color: #1a1a1a;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 8px;
+  }
+  .modal button:active { transform: scale(0.98); }
+  .modal button.secondary {
+    background: transparent;
+    color: var(--text-2);
+    border: 1px solid var(--border);
+  }
+
+  /* Reveal screen */
+  .reveal {
+    position: fixed;
+    inset: 0;
+    background: #f5f1ea;
+    color: #1a1a1a;
+    z-index: 300;
+    overflow-y: auto;
+    display: none;
+  }
+  .reveal.show { display: block; }
+  .reveal-inner {
+    max-width: 580px;
+    margin: 0 auto;
+    padding: 40px 22px 60px;
+  }
+  .reveal-pretitle {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: #8a7d65;
+    margin-bottom: 8px;
+  }
+  .reveal h1 {
+    font-family: 'Anton', sans-serif;
+    font-size: 52px;
+    line-height: 0.95;
+    letter-spacing: -0.5px;
+    margin-bottom: 24px;
+  }
+  .reveal h1 .red-word { color: var(--red); }
+  .reveal .lede {
+    font-family: 'Instrument Serif', serif;
+    font-size: 22px;
+    line-height: 1.4;
+    color: #2a2a2a;
+    margin-bottom: 32px;
+  }
+  .reveal-stat {
+    border-top: 1px solid #d4cfc4;
+    padding: 14px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .reveal-stat:last-of-type { border-bottom: 1px solid #d4cfc4; }
+  .reveal-stat-label { font-size: 13px; color: #6b6357; }
+  .reveal-stat-value {
+    font-family: 'Anton', sans-serif;
+    font-size: 24px;
+    font-variant-numeric: tabular-nums;
+  }
+  .reveal-stat-value.loss { color: var(--red); }
+  .reveal-stat-value.win { color: #1a8f5a; }
+  .reveal h2 {
+    font-family: 'Anton', sans-serif;
+    font-size: 24px;
+    margin: 36px 0 12px;
+    letter-spacing: 0.5px;
+  }
+  .reveal p {
+    font-family: 'Manrope', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    color: #333;
+    margin-bottom: 14px;
+  }
+  .reveal strong { color: #1a1a1a; }
+  .reveal .quote {
+    font-family: 'Instrument Serif', serif;
+    font-size: 22px;
+    font-style: italic;
+    line-height: 1.4;
+    padding: 16px 0 16px 20px;
+    border-left: 3px solid var(--red);
+    margin: 28px 0;
+    color: #1a1a1a;
+  }
+  .reveal-help {
+    background: #1a1a1a;
+    color: white;
+    padding: 24px;
+    border-radius: 12px;
+    margin: 32px 0 16px;
+  }
+  .reveal-help h3 {
+    font-family: 'Anton', sans-serif;
+    font-size: 18px;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+  }
+  .reveal-help p { color: #c5c5c5; margin-bottom: 8px; font-size: 14px; }
+  .reveal-help strong { color: var(--gold-2); }
+  .reset-btn {
+    background: #1a1a1a;
+    color: white;
+    border: none;
+    padding: 14px 22px;
+    border-radius: 8px;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    margin-top: 24px;
+    cursor: pointer;
+  }
+
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+  }
+
+  @media (max-height: 700px) {
+    .wheel { width: 130px; height: 130px; font-size: 56px; }
+    .balance-amount { font-size: 32px; }
+    .wheel-area { padding: 8px 0; gap: 10px; }
+  }
+  @media (max-width: 360px) {
+    .color-btn { font-size: 18px; padding: 14px; }
+    .brand-name { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+<h1 class="sr-only">Simulador educativo de apuestas para charla de ludopatía</h1>
+
+<div class="app">
+  <header class="header">
+    <div class="brand">
+      <span class="brand-name">MEGABET</span>
+      <span class="brand-tld">.bet</span>
+    </div>
+    <div class="online-pill">
+      <span class="pulse-dot"></span>
+      <span id="online-count">12.847 jugando</span>
+    </div>
+  </header>
+
+  <div class="balance-card">
+    <div>
+      <div class="balance-label">Tu plata</div>
+      <div class="balance-amount" id="balance">$10.000</div>
+    </div>
+    <div class="stats-mini">
+      <div class="stat">Ronda <strong id="round-count">0</strong></div>
+      <div class="stat">Neto <strong id="net">$0</strong></div>
+    </div>
+  </div>
+
+  <div class="wheel-area">
+    <div class="wheel" id="wheel">?</div>
+    <div class="history-bar" id="history"></div>
+  </div>
+
+  <div class="bet-controls">
+    <div class="chips" id="chips">
+      <button class="chip" data-amount="100">$100</button>
+      <button class="chip active" data-amount="500">$500</button>
+      <button class="chip" data-amount="1000">$1K</button>
+      <button class="chip" data-amount="2500">$2,5K</button>
+    </div>
+    <div class="colors">
+      <button class="color-btn red" data-color="red">ROJO</button>
+      <button class="color-btn black" data-color="black">NEGRO</button>
+    </div>
+    <button class="spin-btn" id="spinBtn" disabled>GIRAR</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="modal-bg" id="modal-bg">
+  <div class="modal">
+    <div class="modal-badge" id="modal-badge">OFERTA</div>
+    <h2 id="modal-title">¡Acelerá tu juego!</h2>
+    <p id="modal-text">Saltá 500 rondas de una y descubrí hasta dónde podés llegar.</p>
+    <button id="modal-accept">SÍ, ACELERAR 500 RONDAS</button>
+    <button class="secondary" id="modal-decline">Seguir jugando manual</button>
+  </div>
+</div>
+
+<div class="reveal" id="reveal">
+  <div class="reveal-inner">
+    <div class="reveal-pretitle">Lo que MEGABET no te cuenta</div>
+    <h1>El casino <span class="red-word">siempre</span> gana.</h1>
+    <div class="lede" id="reveal-lede">
+      Esto es lo que pasó realmente.
+    </div>
+
+    <div class="reveal-stat">
+      <span class="reveal-stat-label">Plata inicial</span>
+      <span class="reveal-stat-value">$10.000</span>
+    </div>
+    <div class="reveal-stat">
+      <span class="reveal-stat-label">Plata final</span>
+      <span class="reveal-stat-value loss" id="final-balance">—</span>
+    </div>
+    <div class="reveal-stat">
+      <span class="reveal-stat-label">Total apostado</span>
+      <span class="reveal-stat-value" id="total-bet">—</span>
+    </div>
+    <div class="reveal-stat">
+      <span class="reveal-stat-label">Ventaja real del casino (teórica: 2,7%)</span>
+      <span class="reveal-stat-value" id="realized-edge">—</span>
+    </div>
+
+    <h2>Por qué no podías ganar</h2>
+    <p>La ruleta tiene 37 casilleros: 18 rojos, 18 negros y <strong>1 verde (el cero)</strong>. Cuando apostás a rojo o negro, tus chances de ganar no son 50% — son 18 de 37, o sea <strong>48,6%</strong>.</p>
+    <p>Ese 1,4% extra que tiene la casa se llama <em>ventaja del casino</em>. Parece nada. Pero multiplicado por cada apuesta, por cada jugador, por cada día del año, es lo que paga las arañas de cristal de Las Vegas y los partidos del Real Madrid que esponsorea Bplay.</p>
+
+    <h2>La trampa mental</h2>
+    <p>Capaz ganaste algunas rondas. Capaz estuviste arriba en algún momento. <strong>Eso es exactamente lo que MEGABET quería</strong>: que sientas que "casi" ganás, que la próxima va a ser tuya. Fijate cuántos mensajes te mandó: "¡Buena racha!", "Apostá más fuerte para recuperar". No son casualidad.</p>
+    <p>Cada apuesta nueva, sin importar cómo venís, tiene la misma pérdida esperada de 2,7%. No estás recuperando: estás cavando el pozo más hondo.</p>
+
+    <div class="quote">
+      "El casino no le gana a cada apuesta. Le gana al tiempo. Cuanto más jugás, más cierto se vuelve que perdés."
+    </div>
+
+    <div class="reveal-help">
+      <h3>¿TE ESTÁ PASANDO EN SERIO?</h3>
+      <p>Si vos o alguien que conocés siente que no puede parar de apostar, hay ayuda gratuita y anónima.</p>
+      <p><strong>Argentina:</strong> Línea SEDRONAR <strong>141</strong> (24hs, gratis desde cualquier teléfono).</p>
+      <p><strong>Jugadores Anónimos Argentina:</strong> <strong>(011) 4781-3138</strong></p>
+      <p>Hablar con alguien es el primer paso. Y no, no sos un perdedor por pedir ayuda — sos un perdedor si seguís jugando contra una máquina que está diseñada para que pierdas.</p>
+    </div>
+
+    <button class="reset-btn" id="reset-btn">VOLVER AL INICIO</button>
+  </div>
+</div>
+
+<script>
+(() => {
+  const state = {
+    balance: 10000,
+    initialBalance: 10000,
+    totalBet: 0,
+    rounds: 0,
+    wins: 0,
+    zeros: 0,
+    history: [],
+    betAmount: 500,
+    selectedColor: null,
+    isSpinning: false,
+    nudgeShown: false,
+    fakeOnline: 12847,
+    revealShown: false
+  };
+
+  const $ = (sel) => document.querySelector(sel);
+  const $$ = (sel) => document.querySelectorAll(sel);
+
+  const fmt = (n) => {
+    const sign = n < 0 ? '-' : '';
+    return sign + '$' + Math.abs(Math.round(n)).toLocaleString('es-AR');
+  };
+
+  const spinNumber = () => Math.floor(Math.random() * 37);
+  const colorOf = (n) => n === 0 ? 'green' : (n <= 18 ? 'red' : 'black');
+
+  function updateBalance() {
+    $('#balance').textContent = fmt(state.balance);
+    $('#round-count').textContent = state.rounds;
+    const net = state.balance - state.initialBalance;
+    const netEl = $('#net');
+    netEl.textContent = (net >= 0 ? '+' : '') + fmt(net);
+    netEl.style.color = net > 0 ? 'var(--green)' : net < 0 ? 'var(--red)' : 'var(--text)';
+  }
+
+  function updateHistory() {
+    $('#history').innerHTML = state.history.slice(0, 12).map(h =>
+      `<div class="history-dot ${h.color}">${h.num}</div>`
+    ).join('');
+  }
+
+  function showToast(msg, kind = '') {
+    const t = $('#toast');
+    t.textContent = msg;
+    t.className = 'toast show ' + kind;
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.classList.remove('show'), 1700);
+  }
+
+  function spin(skipAnimation = false) {
+    if (state.isSpinning && !skipAnimation) return;
+    if (state.balance < state.betAmount) {
+      showToast('Te quedaste sin plata', 'loss');
+      setTimeout(showReveal, 900);
+      return;
+    }
+    if (!state.selectedColor) return;
+
+    const num = spinNumber();
+    const color = colorOf(num);
+
+    if (skipAnimation) {
+      finishSpin(num, color, true);
+      return;
+    }
+
+    state.isSpinning = true;
+    $('#spinBtn').disabled = true;
+
+    const wheel = $('#wheel');
+    wheel.classList.add('spinning');
+    let cycles = 0;
+    const interval = setInterval(() => {
+      const fakeN = Math.floor(Math.random() * 37);
+      wheel.textContent = fakeN;
+      wheel.className = 'wheel spinning ' + colorOf(fakeN);
+      cycles++;
+      if (cycles > 10) {
+        clearInterval(interval);
+        wheel.classList.remove('spinning');
+        wheel.textContent = num;
+        wheel.className = 'wheel ' + color;
+        finishSpin(num, color, false);
+        state.isSpinning = false;
+      }
+    }, 60);
+  }
+
+  function finishSpin(num, color, silent) {
+    state.rounds++;
+    state.totalBet += state.betAmount;
+    if (color === 'green') state.zeros++;
+
+    const won = color === state.selectedColor;
+    if (won) {
+      state.balance += state.betAmount;
+      state.wins++;
+    } else {
+      state.balance -= state.betAmount;
+    }
+
+    state.history.unshift({num, color});
+
+    if (!silent) {
+      if (color === 'green') {
+        showToast('Salió el 0 — perdés cualquiera sea tu apuesta', 'loss');
+      } else if (won) {
+        const wins = [
+          '¡GANASTE! +' + fmt(state.betAmount),
+          '¡Estás en racha! +' + fmt(state.betAmount),
+          '¡Sos un crack! +' + fmt(state.betAmount),
+          '¡Otra más! +' + fmt(state.betAmount)
+        ];
+        showToast(wins[Math.floor(Math.random() * wins.length)], 'win');
+      } else {
+        const losses = [
+          'Ufff, casi. Probá otra vez',
+          'La próxima la sacás seguro',
+          'Apostá más fuerte para recuperar',
+          'No aflojes ahora',
+          'Cambiá de color, capaz cambia la suerte'
+        ];
+        showToast(losses[Math.floor(Math.random() * losses.length)], 'loss');
+      }
+    }
+
+    state.fakeOnline += Math.floor(Math.random() * 9) - 4;
+    $('#online-count').textContent = state.fakeOnline.toLocaleString('es-AR') + ' jugando';
+
+    updateBalance();
+    updateHistory();
+
+    if (!silent) $('#spinBtn').disabled = false;
+
+    if (state.rounds === 5 && !state.nudgeShown) {
+      state.nudgeShown = true;
+      setTimeout(showNudge, 1100);
+    }
+
+    if (state.balance < state.betAmount && !state.revealShown) {
+      state.revealShown = true;
+      setTimeout(showReveal, 1200);
+    }
+  }
+
+  function showNudge() {
+    const net = state.balance - state.initialBalance;
+    if (net >= 0) {
+      $('#modal-badge').textContent = 'OFERTA VIP';
+      $('#modal-title').textContent = '¡Estás imparable!';
+      $('#modal-text').textContent = 'Vas ganando ' + fmt(net) + '. Acelerá 500 rondas y multiplicá tu plata sin esperar.';
+    } else {
+      $('#modal-badge').textContent = 'RECUPERÁ AHORA';
+      $('#modal-title').textContent = 'No te rindas';
+      $('#modal-text').textContent = 'Estás abajo ' + fmt(Math.abs(net)) + '. Acelerá 500 rondas y recuperá todo más rápido.';
+    }
+    $('#modal-bg').classList.add('show');
+  }
+
+  function autoPlay() {
+    $('#modal-bg').classList.remove('show');
+    if (!state.selectedColor) state.selectedColor = 'red';
+    const target = state.rounds + 500;
+    const interval = setInterval(() => {
+      if (state.rounds >= target || state.balance < state.betAmount) {
+        clearInterval(interval);
+        if (!state.revealShown) {
+          state.revealShown = true;
+          setTimeout(showReveal, 700);
+        }
+        return;
+      }
+      state.selectedColor = Math.random() < 0.5 ? 'red' : 'black';
+      const num = spinNumber();
+      finishSpin(num, colorOf(num), true);
+    }, 18);
+  }
+
+  function showReveal() {
+    const final = state.balance;
+    const lost = state.initialBalance - final;
+    const finalEl = $('#final-balance');
+    finalEl.textContent = fmt(final);
+    finalEl.className = 'reveal-stat-value ' + (lost > 0 ? 'loss' : lost < 0 ? 'win' : '');
+    $('#total-bet').textContent = fmt(state.totalBet);
+
+    const edge = state.totalBet > 0 ? (lost / state.totalBet * 100) : 0;
+    $('#realized-edge').textContent = (edge >= 0 ? '+' : '') + edge.toFixed(2) + '%';
+
+    let lede;
+    if (lost > 0) {
+      lede = `Perdiste <strong>${fmt(lost)}</strong> en ${state.rounds} rondas. Es exactamente lo que la matemática predice.`;
+    } else if (lost === 0) {
+      lede = `Quedaste empatado después de ${state.rounds} rondas. Tuviste suerte. Si seguís jugando, perdés.`;
+    } else {
+      lede = `Ganaste <strong>${fmt(-lost)}</strong> en ${state.rounds} rondas. Tuviste mucha suerte. Si seguís jugando, perdés todo.`;
+    }
+    $('#reveal-lede').innerHTML = lede;
+
+    $('#reveal').classList.add('show');
+    $('#reveal').scrollTop = 0;
+  }
+
+  function reset() {
+    Object.assign(state, {
+      balance: 10000, totalBet: 0, rounds: 0, wins: 0, zeros: 0,
+      history: [], selectedColor: null, nudgeShown: false,
+      isSpinning: false, betAmount: 500, revealShown: false
+    });
+    $('#reveal').classList.remove('show');
+    $$('.chip').forEach(c => c.classList.toggle('active', c.dataset.amount === '500'));
+    $$('.color-btn').forEach(c => c.classList.remove('selected'));
+    $('#wheel').textContent = '?';
+    $('#wheel').className = 'wheel';
+    $('#spinBtn').disabled = true;
+    updateBalance();
+    updateHistory();
+  }
+
+  $$('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      $$('.chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      state.betAmount = parseInt(chip.dataset.amount);
+    });
+  });
+
+  $$('.color-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      $$('.color-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      state.selectedColor = btn.dataset.color;
+      $('#spinBtn').disabled = false;
+    });
+  });
+
+  $('#spinBtn').addEventListener('click', () => spin(false));
+  $('#modal-accept').addEventListener('click', autoPlay);
+  $('#modal-decline').addEventListener('click', () => $('#modal-bg').classList.remove('show'));
+  $('#reset-btn').addEventListener('click', reset);
+
+  updateBalance();
+  updateHistory();
+})();
+</script>
+</body>
+</html>
