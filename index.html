@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>MEGABET · ¿Podés ganarle al casino?</title>
+<title>JECHBET · ¿Podés ganarle al casino?</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
@@ -11,18 +11,18 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --bg: #08090d;
-    --bg-2: #11131a;
-    --surface: rgba(255,255,255,0.04);
-    --surface-2: rgba(255,255,255,0.07);
-    --border: rgba(255,255,255,0.08);
+    --bg: #0a1018;
+    --bg-2: #111c2c;
+    --surface: rgba(120,160,210,0.06);
+    --surface-2: rgba(120,160,210,0.11);
+    --border: rgba(120,160,210,0.16);
     --text: #ffffff;
-    --text-2: #8a8d99;
+    --text-2: #8ea0bd;
     --red: #ff2e4c;
     --red-glow: rgba(255,46,76,0.4);
     --green: #00d97e;
-    --gold: #f4b942;
-    --gold-2: #ffd970;
+    --blue: #4e79b0;
+    --blue-2: #7ba6da;
   }
 
   html, body { height: 100%; }
@@ -40,8 +40,8 @@
     position: fixed;
     inset: 0;
     background:
-      radial-gradient(circle at 20% 10%, rgba(255,46,76,0.08), transparent 50%),
-      radial-gradient(circle at 80% 90%, rgba(244,185,66,0.06), transparent 50%);
+      radial-gradient(circle at 20% 10%, rgba(78,121,176,0.18), transparent 50%),
+      radial-gradient(circle at 80% 90%, rgba(123,166,218,0.12), transparent 50%);
     pointer-events: none;
     z-index: 0;
   }
@@ -67,14 +67,20 @@
 
   .brand {
     display: flex;
-    align-items: baseline;
-    gap: 2px;
+    align-items: center;
+    gap: 8px;
+  }
+  .brand-logo {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    flex-shrink: 0;
   }
   .brand-name {
     font-family: 'Anton', sans-serif;
     font-size: 28px;
     letter-spacing: 1.5px;
-    background: linear-gradient(180deg, var(--gold-2), var(--gold));
+    background: linear-gradient(180deg, var(--blue-2), var(--blue));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -128,7 +134,7 @@
     right: -20%;
     width: 200px;
     height: 200px;
-    background: radial-gradient(circle, var(--gold), transparent 70%);
+    background: radial-gradient(circle, var(--blue), transparent 70%);
     opacity: 0.08;
     filter: blur(40px);
   }
@@ -143,7 +149,7 @@
     font-family: 'Anton', sans-serif;
     font-size: 36px;
     letter-spacing: 0.5px;
-    color: var(--gold-2);
+    color: var(--blue-2);
     line-height: 1;
   }
   .stats-mini { text-align: right; line-height: 1.6; }
@@ -245,9 +251,9 @@
   }
   .chip:active { transform: scale(0.96); }
   .chip.active {
-    background: var(--gold);
-    color: #1a1a1a;
-    border-color: var(--gold);
+    background: var(--blue);
+    color: #ffffff;
+    border-color: var(--blue);
   }
 
   .colors {
@@ -269,19 +275,19 @@
   }
   .color-btn.red { background: var(--red); }
   .color-btn.black { background: #1a1a1a; }
-  .color-btn.selected { border-color: var(--gold); transform: scale(1.02); }
+  .color-btn.selected { border-color: var(--blue); transform: scale(1.02); }
   .color-btn:active { transform: scale(0.98); }
 
   .spin-btn {
     width: 100%;
     padding: 18px;
-    background: var(--gold);
+    background: var(--blue);
     border: none;
     border-radius: 12px;
     font-family: 'Anton', sans-serif;
     font-size: 22px;
     letter-spacing: 2px;
-    color: #1a1a1a;
+    color: #ffffff;
     cursor: pointer;
     transition: all 0.15s ease;
   }
@@ -347,8 +353,8 @@
 
   .modal-badge {
     display: inline-block;
-    background: var(--gold);
-    color: #1a1a1a;
+    background: var(--blue);
+    color: #ffffff;
     font-weight: 700;
     font-size: 10px;
     padding: 4px 10px;
@@ -372,8 +378,8 @@
     display: block;
     width: 100%;
     padding: 14px;
-    background: var(--gold);
-    color: #1a1a1a;
+    background: var(--blue);
+    color: #ffffff;
     border: none;
     border-radius: 10px;
     font-family: 'Manrope', sans-serif;
@@ -482,7 +488,7 @@
     letter-spacing: 0.5px;
   }
   .reveal-help p { color: #c5c5c5; margin-bottom: 8px; font-size: 14px; }
-  .reveal-help strong { color: var(--gold-2); }
+  .reveal-help strong { color: var(--blue-2); }
   .reset-btn {
     background: #1a1a1a;
     color: white;
@@ -495,6 +501,27 @@
     margin-top: 24px;
     cursor: pointer;
   }
+
+  .reveal-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+    margin-top: 48px;
+    padding-top: 28px;
+    border-top: 1px solid #d4cfc4;
+    font-family: 'Manrope', sans-serif;
+    font-size: 12px;
+    color: #6b6357;
+  }
+  .reveal-logo {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    display: block;
+  }
+  .reveal-footer a { color: #6b6357; }
 
   .sr-only {
     position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
@@ -518,7 +545,8 @@
 <div class="app">
   <header class="header">
     <div class="brand">
-      <span class="brand-name">MEGABET</span>
+      <img src="portada.png" alt="" class="brand-logo">
+      <span class="brand-name">JECHBET</span>
       <span class="brand-tld">.bet</span>
     </div>
     <div class="online-pill">
@@ -572,7 +600,7 @@
 
 <div class="reveal" id="reveal">
   <div class="reveal-inner">
-    <div class="reveal-pretitle">Lo que MEGABET no te cuenta</div>
+    <div class="reveal-pretitle">Lo que JECHBET no te cuenta</div>
     <h1>El casino <span class="red-word">siempre</span> gana.</h1>
     <div class="lede" id="reveal-lede">
       Esto es lo que pasó realmente.
@@ -600,7 +628,7 @@
     <p>Ese 1,4% extra que tiene la casa se llama <em>ventaja del casino</em>. Parece nada. Pero multiplicado por cada apuesta, por cada jugador, por cada día del año, es lo que paga las arañas de cristal de Las Vegas y los partidos del Real Madrid que esponsorea Bplay.</p>
 
     <h2>La trampa mental</h2>
-    <p>Capaz ganaste algunas rondas. Capaz estuviste arriba en algún momento. <strong>Eso es exactamente lo que MEGABET quería</strong>: que sientas que "casi" ganás, que la próxima va a ser tuya. Fijate cuántos mensajes te mandó: "¡Buena racha!", "Apostá más fuerte para recuperar". No son casualidad.</p>
+    <p>Capaz ganaste algunas rondas. Capaz estuviste arriba en algún momento. <strong>Eso es exactamente lo que JECHBET quería</strong>: que sientas que "casi" ganás, que la próxima va a ser tuya. Fijate cuántos mensajes te mandó: "¡Buena racha!", "Apostá más fuerte para recuperar". No son casualidad.</p>
     <p>Cada apuesta nueva, sin importar cómo venís, tiene la misma pérdida esperada de 2,7%. No estás recuperando: estás cavando el pozo más hondo.</p>
 
     <div class="quote">
@@ -616,6 +644,11 @@
     </div>
 
     <button class="reset-btn" id="reset-btn">VOLVER AL INICIO</button>
+
+    <div class="reveal-footer">
+      <img src="portada.png" alt="JECH Capital" class="reveal-logo">
+      <span>Una iniciativa de JECH Capital · <a href="https://www.jechcapital.com" target="_blank" rel="noopener">www.jechcapital.com</a></span>
+    </div>
   </div>
 </div>
 
